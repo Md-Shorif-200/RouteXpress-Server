@@ -37,6 +37,7 @@ async function run() {
     const db = client.db('RouteXpress-Db')
 
     const userCollection = db.collection('users');
+    const bookedPercelCollection = db.collection('booked-percels');
 
 
     // -------------- user related api
@@ -66,6 +67,23 @@ async function run() {
           const result = await userCollection.find().toArray();
           res.send(result)
     })
+
+
+    // ------------------ booking percel related api
+       app.post('/api/book-percel',async(req,res) => {
+        const data = req.body;
+
+        const result = await bookedPercelCollection.insertOne(data);
+       res.send(result)
+    });
+
+
+          // find all users 
+    app.get('/api/book-percel',async(req,res) => {
+          const result = await bookedPercelCollection.find().toArray();
+          res.send(result)
+    })
+
 
 
 
