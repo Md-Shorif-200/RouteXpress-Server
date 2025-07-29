@@ -30,6 +30,62 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+
+    
+    // !mongodb collections 
+    const db = client.db('RouteXpress-Db')
+
+    const userCollection = db.collection('users');
+
+
+    // -------------- user related api
+        app.post('/api/users',async(req,res) => {
+        const newUser = req.body;
+        const email = newUser.email;
+
+        // varify user
+        if(!email){
+            return res.status(400).send({meassage : 'Email Is Required'})
+        }
+
+        // if User is already exist
+        const existingUser = await userCollection.findOne({email});
+
+        if(existingUser){
+            return res.status(200).send({meassage : 'User Already Exist in database'})
+        }
+
+        const result = await userCollection.insertOne(newUser);
+     res.send(result)
+    });
+
+
+        // find all users 
+    app.get('/api/users',async(req,res) => {
+          const result = await userCollection.find().toArray();
+          res.send(result)
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
