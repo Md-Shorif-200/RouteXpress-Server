@@ -68,6 +68,29 @@ async function run() {
           res.send(result)
     })
 
+    // update user role
+
+    app.patch('/api/users/update-role/:email',async (req,res) => {
+        const data = req.body;
+        const role = data.role
+        const email = req.params.email;
+        const filter = {email};
+    
+
+        const updatedDoc = {
+          $set : {
+            role : role
+          }
+        }
+    
+        const result = await userCollection.updateOne(filter,updatedDoc);
+        res.send(result)
+        
+
+         
+    })
+
+
 
     // ------------------ booking percel related api
        app.post('/api/book-percel',async(req,res) => {
